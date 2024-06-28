@@ -6,13 +6,8 @@
     "sourceMap": true,
     "outDir": "dist",
     "declaration": true,
-    "types": ["node"]
+    "types": ["node"],
+    "strict": true
   },
-  "include": [
-    "typings/**/*.d.ts"
-  ],
-  "files": [
-    "./src/GraphQlQuery.ts",
-    "./test/GraphQlQuery.spec.ts"
-  ]
+  "include": ["src"]
 }

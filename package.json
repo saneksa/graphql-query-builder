@@ -1,6 +1,6 @@
 {
-  "name": "wix-graphql-query-builder",
-  "version": "1.0.1",
+  "name": "@saneksa/graphql-query-builder",
+  "version": "2.0.0",
   "description": "a simple but powerful graphQL query builder",
   "bin": {},
   "files": [
@@ -8,28 +8,22 @@
   ],
   "dependencies": {},
   "devDependencies": {
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
+    "@types/jest": "^29.5.12",
     "@types/node": "^10.5.2",
-    "bower": "^1.7.9",
-    "bower-auto-release": "^1.0.99",
-    "chai": "^3.5.0",
-    "coveralls": "^2.11.11",
-    "istanbul": "^0.4.4",
-    "mocha": "^2.5.3",
-    "typescript": "^2.5.2",
-    "yoshi": "latest"
+    "jest": "^29.7.0",
+    "typescript": "^5.5.2"
   },
   "scripts": {
-    "build": ":",
-    "pretest": "yoshi build",
-    "test": "npm run test:unit",
-    "test:unit": "yoshi test --mocha",
-    "release": "yoshi release; bower-auto-release --dist dist/src"
+    "build": "tsc",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/wix/graphql-query-builder.git"
+    "url": "git://github.com/saneksa/graphql-query-builder.git"
   },
-  "homepage": "https://github.com/wix/graphql-query-builder",
+  "homepage": "https://github.com/saneksa/graphql-query-builder",
   "keywords": [
     "graphql",
     "query",
@@ -45,8 +39,5 @@
   "bugs": {
     "url": "https://github.com/codemeasandwich/graphql-query-builder/issues"
   },
-  "private": false,
-  "publishConfig": {
-    "registry": "http://repo.dev.wix/artifactory/api/npm/npm-local/"
-  }
+  "private": false
 }
