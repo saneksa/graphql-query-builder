@@ -150,7 +150,18 @@ export class GraphQlQuery {
 
   private buildAlias(attr: IAlias): string {
     let alias = Object.keys(attr)[0];
-    let value = this.prepareAsInnerQuery(attr[alias]);
+
+    if (!alias) {
+      throw new Error("An empty object was passed");
+    }
+
+    const query = attr[alias];
+
+    if (!query) {
+      throw new Error("Error of query formation");
+    }
+
+    let value = this.prepareAsInnerQuery(query);
 
     value = alias !== value ? `${alias}: ${value}` : value;
     return value;
