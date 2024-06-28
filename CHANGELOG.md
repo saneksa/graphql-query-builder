@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/saneksa/graphql-query-builder/compare/v3.0.1...v3.1.0) (2024-06-28)
+
+
+### Features
+
+* added throwing errors when forming an alliance ([80773d9](https://github.com/saneksa/graphql-query-builder/commit/80773d9333a73488ecbc22beb10768a4a344e12e))
+
 ### [3.0.1](https://github.com/saneksa/graphql-query-builder/compare/v3.0.0...v3.0.1) (2024-06-28)
 
 
