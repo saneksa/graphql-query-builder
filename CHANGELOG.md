@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/saneksa/graphql-query-builder/compare/v3.0.0...v3.0.1) (2024-06-28)
+
+
+### Bug Fixes
+
+* example ([946604d](https://github.com/saneksa/graphql-query-builder/commit/946604db69a16a0ec020b73d5e2714e8038d5b6c))
+
 ## [3.0.0](https://github.com/saneksa/graphql-query-builder/compare/v2.1.0...v3.0.0) (2024-06-28)
 
 
