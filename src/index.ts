@@ -1,9 +1,9 @@
-export interface GraphQlQueryFactory {
+export interface IGraphQlQueryFactory {
   new (fnName: string | IAlias, argumentsMap?: IArgumentsMap): GraphQlQuery;
 }
 
 export interface IArgumentsMap {
-  [index: string]: string | number | boolean | Object | EnumValue;
+  [index: string]: string | number | boolean | EnumValue | unknown;
 }
 
 export interface IAlias {
@@ -20,15 +20,15 @@ export interface IBody {
   argumentsMap?: IArgumentsMap;
 }
 
-export interface ISelection extends IArgumentsMap {
-  _filter?: any;
+export interface ISelection extends Partial<IArgumentsMap> {
+  _filter?: Record<string, unknown>;
 }
 
 export class GraphQlQuery {
-  private head: IHead;
-  private body: (IBody | GraphQlQuery)[];
-  private isContainer: boolean;
-  private isWithoutBody: boolean;
+  protected head: IHead;
+  protected body: (IBody | GraphQlQuery)[];
+  protected isContainer: boolean;
+  protected isWithoutBody: boolean;
 
   constructor(fnName: string | IAlias, argumentsMap: IArgumentsMap = {}) {
     this.head =
@@ -58,9 +58,9 @@ export class GraphQlQuery {
         } else if (item instanceof GraphQlQuery) {
           selection = item;
         } else if (typeof item === "object") {
-          selection.argumentsMap = <IArgumentsMap>item["_filter"] || {};
-          delete item["_filter"];
-          selection.attr = <IAlias>item;
+          selection.argumentsMap = (item._filter as IArgumentsMap) || {};
+          delete item._filter;
+          selection.attr = item as IAlias;
         }
 
         return selection;
@@ -70,7 +70,7 @@ export class GraphQlQuery {
   }
 
   public filter(argumentsMap: IArgumentsMap): GraphQlQuery {
-    for (let key in argumentsMap) {
+    for (const key in argumentsMap) {
       if (argumentsMap.hasOwnProperty(key) && this.head.argumentsMap) {
         this.head.argumentsMap[key] = argumentsMap[key];
       }
@@ -100,27 +100,29 @@ export class GraphQlQuery {
   public toString() {
     if (this.isContainer) {
       return `{ ${this.buildBody()} }`;
-    } else if (this.isWithoutBody) {
-      return `{ ${this.buildHeader()} }`;
-    } else {
-      return `{ ${this.buildHeader()}{${this.buildBody()}} }`;
     }
+
+    if (this.isWithoutBody) {
+      return `{ ${this.buildHeader()} }`;
+    }
+
+    return `{ ${this.buildHeader()}{${this.buildBody()}} }`;
   }
 
-  private buildHeader(): string {
+  public buildHeader(): string {
     return (
       this.buildAlias(this.head.fnName) +
       this.buildArguments(this.head.argumentsMap)
     );
   }
 
-  private buildArguments(argumentsMap: IArgumentsMap | undefined): string {
-    const query = argumentsMap ? this.objectToString(argumentsMap) : undefined;
+  public buildArguments(argumentsMap: IArgumentsMap | undefined): string {
+    const query = this.objectToString(argumentsMap);
 
     return query ? `(${query})` : "";
   }
 
-  private getGraphQLValue(
+  public getGraphQLValue(
     value: IArgumentsMap[string] | IArgumentsMap[string][]
   ): string {
     if (Array.isArray(value)) {
@@ -129,26 +131,32 @@ export class GraphQlQuery {
         .join();
 
       return `[${arrayString}]`;
-    } else if (value instanceof EnumValue) {
-      return value.toString();
-    } else if (typeof value === "object") {
-      return (
-        "{" +
-        this.objectToString(value as Record<string, IArgumentsMap[string]>) +
-        "}"
-      );
-    } else {
-      return JSON.stringify(value);
     }
+
+    if (value instanceof EnumValue) {
+      return value.toString();
+    }
+
+    if (value && "object" === typeof value) {
+      return `{${this.objectToString(
+        value as Record<string, IArgumentsMap[string]>
+      )}}`;
+    }
+
+    return JSON.stringify(value);
   }
 
-  private objectToString(obj: Record<string, IArgumentsMap[string]>): string {
-    return Object.keys(obj)
-      .map((key) => `${key}: ${this.getGraphQLValue(obj[key])}`)
-      .join(", ");
+  public objectToString(
+    obj: Record<string, IArgumentsMap[string]> | undefined
+  ): string {
+    return obj
+      ? Object.keys(obj)
+          .map((key) => `${key}: ${this.getGraphQLValue(obj[key])}`)
+          .join(", ")
+      : "";
   }
 
-  private buildAlias(attr: IAlias): string {
+  public buildAlias(attr: IAlias): string {
     let alias = Object.keys(attr)[0];
 
     if (!alias) {
@@ -167,26 +175,26 @@ export class GraphQlQuery {
     return value;
   }
 
-  private buildBody(): string {
+  public buildBody(): string {
     return this.body
       .map((item: IBody | GraphQlQuery) => {
         if (item instanceof GraphQlQuery) {
           return this.prepareAsInnerQuery(item);
-        } else {
-          return (
-            this.buildAlias(item["attr"]) +
-            this.buildArguments(item["argumentsMap"])
-          );
         }
+
+        return (
+          this.buildAlias(item.attr) + this.buildArguments(item.argumentsMap)
+        );
       })
       .join(" ");
   }
 
-  private prepareAsInnerQuery(query: string | GraphQlQuery): string {
+  /** Removes the outer curly braces from the passed { query } */
+  public prepareAsInnerQuery(query: string | GraphQlQuery): string {
     let ret = "";
     if (query instanceof GraphQlQuery) {
       ret = query.toString();
-      ret = ret.substr(2, ret.length - 4);
+      ret = ret.substring(2, ret.length - 2);
     } else {
       ret = query.toString();
     }
