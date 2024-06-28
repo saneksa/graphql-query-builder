@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/saneksa/graphql-query-builder/compare/v2.1.0...v3.0.0) (2024-06-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* namespace removed
+
+### Bug Fixes
+
+* entity export has been changed ([ae31622](https://github.com/saneksa/graphql-query-builder/commit/ae316220b4c2451867b1c0ffd347f6567e1951c9))
+
 ## 2.1.0 (2024-06-28)
 
 
