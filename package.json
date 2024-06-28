@@ -2,7 +2,8 @@
   "name": "@saneksa/graphql-query-builder",
   "version": "2.1.0",
   "description": "a simple but powerful graphQL query builder",
-  "bin": {},
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
