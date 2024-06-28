@@ -2,6 +2,10 @@
 
 a simple but powerful graphQL query builder
 
+<a href="https://www.npmjs.com/package/@saneksa/graphql-query-builder">
+    <img alt="npm" src="https://img.shields.io/npm/v/@saneksa/graphql-query-builder?style=for-the-badge">
+</a>
+
 # Install
 
 `npm install @saneksa/graphql-query-builder`
