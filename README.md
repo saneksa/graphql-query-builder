@@ -11,7 +11,7 @@ a simple but powerful graphQL query builder
 # Example
 
 ```js
-var Query = require("@saneksa/graphql-query-builder");
+import { GraphQlQuery } from "@saneksa/graphql-query-builder";
 
 // example of nesting Querys
 /*
